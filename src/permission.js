@@ -17,7 +17,6 @@ router.beforeEach((to,from,next) => {
         store.dispatch('GetInfo').then(res => {
           // 根据用户token，进一步获取菜单相关的信息
           store.dispatch('GenerateRoutes').then(accessRoutes => {
-            
             next()
           })
         }).catch(err => {

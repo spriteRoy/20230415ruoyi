@@ -15,6 +15,7 @@
 import Logo from "./Logo.vue";
 import variables from "@/assets/styles/variables.scss";
 import SidebarItem from "./SidebarItem.vue";
+import {mapGetters} from 'vuex'
 export default {
   name: "Sidebar",
   components: {
@@ -22,7 +23,6 @@ export default {
   },
   data() {
     return {
-      sidebarRouters:[]
     };
   },
   methods: {},
@@ -30,6 +30,7 @@ export default {
     variables() {
       return variables;
     },
+    ...mapGetters(['sidebarRouters'])
   },
 };
 </script>
