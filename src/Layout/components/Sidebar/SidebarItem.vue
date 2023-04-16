@@ -1,19 +1,21 @@
 <template>
   <!-- index : 唯一标志 -->
   <div v-if="!item.hidden">
-    <template v-if="!item.children">
+    <!-- 只有一个孩子 -->
+    <template v-if="hasOneShowingChild(item.children,item)">
       <!-- AppLink中的路径应该是拼接之后的路径  -->
-      <AppLink :to="bathPath">
-        <el-menu-item :index="item.path">
-          <MenuItem :title="item.meta.title" :icon="item.meta.icon">
+      <AppLink :to="resolvePath(onlyOneChild.path)">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)">
+          <MenuItem :title="onlyOneChild.meta.title" :icon="onlyOneChild.meta.icon">
           </MenuItem>
         </el-menu-item>
       </AppLink>
     </template>
 
-    <el-submenu v-else :index="item.path">
+    <el-submenu v-else :index="bathPath">
       <template slot="title">
-        <span>{{ item.name }}</span>
+        <MenuItem :title="item.meta.title" :icon="item.meta.icon">
+          </MenuItem>
       </template>
       <!-- 路径拼接 -->
       <SidebarItem v-for="child in item.children" :item="child" :key="child.path" :bathPath="resolvePath(child.path)"></SidebarItem>
@@ -42,6 +44,11 @@ export default {
   components: {
     MenuItem,AppLink
   },
+  data(){
+    return{
+      onlyOneChild:null
+    }
+  },
   methods:{
     resolvePath(routePath){
       if (isExternal(routePath)) {
@@ -51,7 +58,34 @@ export default {
         return this.basePath
       }
       return path.resolve(this.bathPath,routePath)
-    }
+    },
+    hasOneShowingChild(children = [], parent) {
+      if (!children) {
+        children = [];
+      }
+      const showingChildren = children.filter(item => {
+        if (item.hidden) {
+          return false
+        } else {
+          // Temp set(will be used if only has one showing child)
+          this.onlyOneChild = item
+          return true
+        }
+      })
+
+      // When there is only one child router, the child router is displayed by default
+      if (showingChildren.length === 1) {
+        return true
+      }
+
+      // Show parent if there are no child router to display
+      if (showingChildren.length === 0) {
+        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        return true
+      }
+
+      return false
+    },
   }
 };
 </script>

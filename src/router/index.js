@@ -14,17 +14,19 @@ export const constantRoutes = [
   {
     path: '/',
     component:  Layout,
-    hidden: true,
+    children:[
+      {
+        path: '/index',
+        component: () => import('@/views/index.vue'),
+        name: 'Index',
+        meta:{
+          title:'首页',
+          icon:''
+        }
+      },
+    ]
   },
-  {
-    path: '/index',
-    component: () => import('@/views/index.vue'),
-    name: 'Index',
-    meta:{
-      title:'首页',
-      icon:''
-    }
-  },
+  
 ]
 
 const router = new VueRouter({
