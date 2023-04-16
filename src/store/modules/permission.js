@@ -1,4 +1,5 @@
 import { getRouters } from '@/api/menu'
+import { constantRoutes } from '@/router'
 const state = {
     routes: [],
     addRoutes: [],
@@ -27,7 +28,7 @@ const actions = {
     GenerateRoutes({ commit }) {
         return new Promise(resolve => {
             getRouters().then(res => {
-                commit('SET_SIDEBAR_ROUTERS',res.data)
+                commit('SET_SIDEBAR_ROUTERS',constantRoutes.concat(res.data))
                 resolve(res)
             })
         })

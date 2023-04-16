@@ -4,20 +4,32 @@ import Layout from '@/Layout/index.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+export const constantRoutes = [
   {
     path: '/login',
     name: 'login',
+    hidden: true,
     component:  () => import('@/views/login.vue'),
   },
   {
     path: '/',
     component:  Layout,
+    hidden: true,
+  },
+  {
+    path: '/index',
+    component: () => import('@/views/index.vue'),
+    name: 'Index',
+    meta:{
+      title:'首页',
+      icon:''
+    }
   },
 ]
 
 const router = new VueRouter({
-  routes
+  // 键和值不相同时，不能省略
+  routes:constantRoutes
 })
 
 export default router
